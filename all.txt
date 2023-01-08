@@ -1,0 +1,150 @@
+SSH AND TELNET
+
+-set ips to all pc's statically
+-open switch cli
+-en
+-conf t
+-interface vlan 1
+-ip address 192.168.1.1 255.255.255.0
+-no shutdown
+-pc-> desktop-> command prompt-> telnet 192.168.1.1
+-switch cli-> exit -> line vty 0 15
+ -> password hafsa -> login 
+-> end -> conf t-> enable password hafsa -> exit
+-> pc -> cmd -> telnet 192.168.1.1-> enter password 
+-> en -> enter password -> conf t
+---SSH---
+-switch cli (switch(config))-> hostname s1
+-ip domain name cs-study
+-crypto key generate rsa
+-bits 1024
+-ip ssh version 2
+-line vty 0 15
+-transport input ssh
+-cmd -> ssh -l admin 01.27.0.4 -> password: fast 
+-> enable -> password: fast
+- conf t
+-interface fastEthernet 0/2
+-no shutdown
+-exit, exit
+-cli -> s1(config-line)-> exit -> username cs-study secret abc 
+-> line vty 0 15 -> login local
+-> cmd -> ssh -l cs-study 01.27.0.4 -> password: abc
+
+
+
+
+DHCP AND DNS
+-router-> en
+-config t
+-int fa0/0
+-ip address 10.0.0.1 255.0.0.0
+-no shutdown
+-exit
+-ip dhcp pool MY_NET 
+-network 10.0.0.0 255.0.0.0
+-default-router 10.0.0.1
+-dns-server 192.168.1.3
+-assign ip to pcs using dhcp 
+-router(config) int fa0/1
+-ip address 192.168.1.1 255.255.255.0
+-no shutdown
+-dhcp->ip config-> ip: 192.168.1.2
+gateway: 192.168.1.1
+dns server: 192.168.1.3
+-dhcp-> services-> dhcp 
+-assign ip to dns server then to the remaining pcs
+-dns server-> services-> dns-> record (address) cname (name))
+
+
+RIP PROTOCOL
+-assign ips to all pcs and routers through 
+different interfaces
+-on each router 
+-en
+-conf t
+-router rip
+-network (of itself)
+-network (ip of which router its connected to)
+-exit
+-do show ip route
+
+
+NAT
+-assign ips to pcs and routers with interface
+and serial 
+-give clock rate
+-exit
+-router(config) int fa0/0
+-ip nat inside
+-exit
+-int s0/1/0
+-ip nat outside
+-exit
+-ip nat inside source static pc_ip router_ip
+-ip route 0.0.0.0 0.0.0.0 s0/1/0
+-do again with different pcs 
+-router# - show ip nat tr
+-ping message
+
+VLAN 
+-put ips on all pcs
+-on switch
+-vlan 2
+-name (name)
+-vlan 3....
+-exit
+-int fa0/0
+switchport mode access
+-switchport access vlan 2....
+-switchport mode trunk
+-main switch->
+-int fa0/1
+-switchport mode trunk 
+- do for all interfaces
+-switchport trunk allowed vlan 2,3,4
+-exit
+-vlan 2
+-name (name)....
+-router
+-int fa0/0
+-no shutdown7
+-int fa0/0.10
+-encapsulation dot1q 2
+-ip address 10.0.0.1 255.0.0.0
+-continue for all default gateways
+-ping 
+
+ACL
+-give ips
+static:
+en,conf t
+int fa0/0
+enable password ccna
+line vty 0 4
+password ccnp
+login
+telnet to router
+exit
+access-list permit ip subnet mask
+ping pc 
+dynamic: 
+-ip access-list extented aclname
+-permit/deny tcp any host ip
+-exit
+-int gigabitethernet0/0
+-ip access-group aclname in
+-exit
+-ping
+
+SUBNETTING
+-> 32-bits borrowed
+-> custom subnet mask
+-> range 
+-> assign ips to all pcs
+-> static- starting ip of other router
+next hop (ip of other router)
+
+
+
+
